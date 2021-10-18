@@ -14,22 +14,7 @@ const app = express()
 app.use(express.json());
 app.use(morganMiddleware);
 
-app.get('/posts/:id', async (req, res, next) => {
-  const { id } = req.params;
-
-  const post = await prisma.posts.findFirst({
-    where: { id: Number(id) },
-    include: { author: true }
-  });
-
-  if (!post) {
-    logger.error(`Post ${id} Not found`);
-    throw new NotFound(`Post ${id} Not found`);
-  }
-
-  res.json(makeSuccessResponse('Ok', post));
-});
-
+// USERS
 app.get("/users", async (_req, res) => {
   const users = await prisma.user.findMany();
 
@@ -50,6 +35,7 @@ app.post('/users', async (req, res) => {
     .json(makeSuccessResponse('User created', newUser));
 })
 
+// POST
 app.get("/feed", async (_req, res) => {
   const posts = await prisma.posts.findMany({
     where: { published: true },
@@ -57,6 +43,22 @@ app.get("/feed", async (_req, res) => {
   });
 
   res.json(makeSuccessResponse("Ok", posts));
+});
+
+app.get('/posts/:id', async (req, res, next) => {
+  const { id } = req.params;
+
+  const post = await prisma.posts.findFirst({
+    where: { id: Number(id) },
+    include: { author: true }
+  });
+
+  if (!post) {
+    logger.error(`Post ${id} Not found`);
+    throw new NotFound(`Post ${id} Not found`);
+  }
+
+  res.json(makeSuccessResponse('Ok', post));
 });
 
 app.post('/posts', async (req, res) => {
@@ -113,6 +115,7 @@ app.delete('/posts/:id', async (req, res) => {
 
 app.use(handleErrors);
 
-app.listen(3001, () =>
+// TODO: extract to bin/www (?)
+app.listen(process.env.PORT || '3000', () =>
   console.log('REST API server ready at: http://localhost:3000'),
-)
+);
