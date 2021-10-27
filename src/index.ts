@@ -78,19 +78,6 @@ app.post('/posts', async (req, res) => {
 app.put('/posts/publish/:id', async (req, res) => {
   const { id } = req.params;
 
-  // TODO: Should it exists?
-  const postAlreadyPublished = await prisma.posts.findFirst({
-    where: {
-      id: Number(id),
-      published: true
-     },
-  });
-  if (postAlreadyPublished) {
-    return res
-      .status(304)
-      .send()
-  }
-
   const post = await prisma.posts.update({
     where: { id: Number(id) },
     data: {
