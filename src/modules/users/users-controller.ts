@@ -1,5 +1,5 @@
-import prisma from '../../db';
-import { makeSuccessResponse } from '../../response-api';
+import prisma from '../../../config/db';
+import { makeSuccessResponse } from '../../utils/response-api';
 
 export async function index(_req: any, res:  any) {
   // TODO: extract to DAL layer

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import { makeSuccessResponse } from '../../response-api';
-import prisma from '../../db';
+import { makeSuccessResponse } from '../../utils/response-api';
+import prisma from '../../../config/db';
 import logger from '../../../config/winston';
 import { NotFound } from '../../utils/errors';
 
@@ -56,7 +56,7 @@ async function publish(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
   const { id } = req.params;
-  const post = await prisma.posts.delete({
+  const postDeleted = await prisma.posts.delete({
     where: { id: Number(id) },
   });
 

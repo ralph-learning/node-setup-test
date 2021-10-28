@@ -1,4 +1,4 @@
-import { makeHttpError, makeValidationError } from '../response-api';
+import { makeHttpError, makeValidationError } from '../utils/response-api';
 import logger from '../../config/winston';
 
 export default function handleErrors(
