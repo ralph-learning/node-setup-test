@@ -1,31 +1,19 @@
 import { Request, Response } from 'express';
 
+import postsService from './post.service';
 import { makeSuccessResponse } from '../../utils/response-api';
 import prisma from '../../../config/db';
-import logger from '../../../config/winston';
-import { NotFound } from '../../utils/errors';
+import postService from './post.service';
 
 export async function index(_req: Request, res: Response) {
-  const posts = await prisma.posts.findMany({
-    where: { published: true },
-    include: { author: true },
-  });
+  const posts = await postsService.getAll();
 
   res.json(makeSuccessResponse("Ok", posts));
 }
 
 export async function show(req: Request, res: Response) {
   const { id } = req.params;
-
-  const post = await prisma.posts.findFirst({
-    where: { id: Number(id) },
-    include: { author: true },
-  });
-
-  if (!post) {
-    logger.error(`Post ${id} Not found`);
-    throw new NotFound(`Post ${id} Not found`);
-  }
+  const post = await postService.getFirst(Number(id));
 
   res.json(makeSuccessResponse("Ok", post));
 }
