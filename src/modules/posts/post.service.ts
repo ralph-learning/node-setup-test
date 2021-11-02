@@ -34,6 +34,8 @@ async function create({ title, content, authorEmail }: any) {
       author: { connect: { email: authorEmail } },
     },
   });
+
+  return newPost;
 }
 
 async function publish(id: number) {
