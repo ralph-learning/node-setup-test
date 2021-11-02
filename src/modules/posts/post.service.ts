@@ -25,8 +25,39 @@ async function getFirst(id: number) {
   return post;
 }
 
+async function create({ title, content, authorEmail }: any) {
+  const newPost = await prisma.posts.create({
+    data: {
+      title,
+      content,
+      published: false,
+      author: { connect: { email: authorEmail } },
+    },
+  });
+}
+
+async function publish(id: number) {
+  const post = await prisma.posts.update({
+    where: { id },
+    data: { published: true },
+  });
+
+  return post;
+}
+
+async function remove(id: number) {
+  const postDeleted = await prisma.posts.delete({
+    where: { id },
+  });
+
+  return postDeleted;
+}
+
 export default {
+  create,
   getAll,
-  getFirst
+  getFirst,
+  publish,
+  remove,
 };
 
