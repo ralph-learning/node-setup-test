@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import postsService from './post.service';
 import { makeSuccessResponse } from '../../utils/response-api';
+import postsService from './post.service';
 import postService from './post.service';
 
 export async function index(_req: Request, res: Response) {
@@ -19,13 +19,8 @@ export async function show(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
   const { title, content, authorEmail } = req.body;
-  const postData = {
-    title,
-    content,
-    authorEmail,
-  };
 
-  const newPost = await postService.create(postData);
+  const newPost = await postService.create({ title, content, authorEmail });
 
   res.json(makeSuccessResponse("Post created", newPost));
 }
