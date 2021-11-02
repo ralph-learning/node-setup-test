@@ -58,6 +58,6 @@ export default {
   getAll,
   getFirst,
   publish,
-  remove,
+  remove
 };
 

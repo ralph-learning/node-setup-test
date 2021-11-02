@@ -1,6 +1,6 @@
 import { Express } from 'express';
 
-import postsController from './posts-controller';
+import postsController from './posts.controller';
 
 export default function (app: Express) {
   app.get("/feed", postsController.index);
