@@ -2,7 +2,7 @@ import prisma from '../../../config/db';
 import logger from '../../../config/winston';
 import { NotFound } from '../../utils/errors';
 
-import { PostCreateInput } from './types';
+import { CreatePostInput } from './types';
 
 async function getAll() {
   const posts = await prisma.posts.findMany({
@@ -27,7 +27,7 @@ async function getFirst(id: number) {
   return post;
 }
 
-async function create({ title, content, authorEmail }: PostCreateInput) {
+async function create({ title, content, authorEmail }: CreatePostInput) {
   const newPost = await prisma.posts.create({
     data: {
       title,
