@@ -1,4 +1,4 @@
-import core from "express";
+import core from 'express';
 
 import usersController from "./users.controller";
 

@@ -33,3 +33,4 @@ export default function handleErrors(
     statusCode: res.statusCode
   }));
 }
+
