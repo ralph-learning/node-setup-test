@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server:dev": "dotenv -e .env.development -- ./node_modules/.bin/nodemon ./bin/www.ts",
-    "test": "dotenv -e .env.test -- jest --watchAll",
+    "server:dev": "NODE_ENV=development ./node_modules/.bin/nodemon ./bin/www.ts",
+    "test": "NODE_ENV=test jest --watchAll",
     "test:migrate:reset": "dotenv -e .env.test --  npx prisma migrate reset",
     "test:migrate:postgres": "dotenv -e .env.test -- npx prisma migrate dev"
   },
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@prisma/client": "^3.2.0",
+    "dotenv": "^10.0.0",
     "dotenv-cli": "^4.1.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
