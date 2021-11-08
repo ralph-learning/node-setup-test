@@ -5,7 +5,7 @@ async function getAll() {
   return await prisma.user.findMany();
 }
 
-async function create(user: Omit<User, 'id'>) {
+async function create(user: Pick<User, "name" | "email">) {
   const newUser = await prisma.user.create({
     data: {
       name: user.name,
