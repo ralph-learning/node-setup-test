@@ -2,8 +2,6 @@ import request from "supertest";
 import app from "../../app";
 import prisma from "../../config/db";
 
-
-
 describe("Users", () => {
   beforeAll(async () => await prisma.$connect());
   afterAll(async () => await prisma.$disconnect());
@@ -43,7 +41,7 @@ describe("Users", () => {
     });
   });
 
-  describe("GET /user", () => {
+  describe("GET /users/:id", () => {
     test("when user is not found, returns a 404", async () => {
       const response = await request(app).get("/users/1");
 
@@ -73,7 +71,6 @@ describe("Users", () => {
     });
   });
 
-
   describe("Post /users", () => {
     test("when send correct data, then create a new user", async () => {
       const data = {
@@ -96,7 +93,7 @@ describe("Users", () => {
       expect(response.statusCode).toEqual(201);
     });
 
-    test.only("when the email isn't unique, then return a validation error", async () => {
+    test("when the email isn't unique, then return a validation error", async () => {
       const data = {
         name: "John Doe",
         email: "john@doe.com"
