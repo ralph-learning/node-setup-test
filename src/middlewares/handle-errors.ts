@@ -1,5 +1,6 @@
 import { makeHttpError, makeValidationError } from '../utils/response-api';
 import logger from '../../config/winston';
+import { PrismaClientValidationError } from '@prisma/client/runtime';
 
 const errorsPrisma: {[key: string]: string} = {
   UNIQUE: "P2002",
@@ -29,6 +30,17 @@ export default function handleErrors(
       .json(makeValidationError(err.errors));
   }
 
+  /*
+    Prisma Client throws a PrismaClientValidationError exception if validation fails.
+    for example:
+      Missing field - for example, an empty data: {} property when creating a new record
+      Incorrect field type provided (for example, setting a Boolean field to "Hello, I like cheese and gold!")
+  */
+  if (err instanceof PrismaClientValidationError) {
+    return res.status(422).json(makeValidationError(err.message));
+  }
+
+  // Default
   res.status(err.statusCode || 500).json(makeHttpError({
     message: err.message,
     statusCode: res.statusCode

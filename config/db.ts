@@ -7,10 +7,11 @@ type GlobalThisWithPrismaClient = typeof globalThis & {
 }
 
 // Arguments for PrismaClient constructor:
-const prismaConfig = {
+const prismaConfig: any = {
+  errorFormat: 'minimal',
   rejectOnNotFound: {
     findFirst: (error: any) => new NotFound(error.message),
-  }
+  },
 }
 
 const getPrismaClient = () => {

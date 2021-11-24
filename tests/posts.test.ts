@@ -46,7 +46,7 @@ describe("Posts", () => {
     });
   });
 
-  describe.only('POST /posts', () => {
+  describe('POST /posts', () => {
     it('should create a post', async () => {
       const author = await prisma.user.create({
         data: {
@@ -81,9 +81,7 @@ describe("Posts", () => {
 
       const response = await request(app).post('/posts').send(postData);
 
-      // expect(response.body.code).toBe('Validation Error');
-      expect(response.body.message)
-        .toBe('Unknown arg `author` in data.author for type PostsUncheckedCreateInput. Did you mean `authorId`?\n');
+      expect(response.body.code).toBe('Unprocessable Entity');
       expect(response.statusCode).toBe(422);
     })
   });

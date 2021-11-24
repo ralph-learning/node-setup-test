@@ -73,7 +73,7 @@ describe("Users", () => {
     });
   });
 
-  describe.only("Post /users", () => {
+  describe("Post /users", () => {
     test("when send correct data, then create a new user", async () => {
       const data = {
         name: "John Doe",
