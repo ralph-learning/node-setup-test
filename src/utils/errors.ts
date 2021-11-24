@@ -24,7 +24,7 @@ export class UnprocessableEntityError extends HttpError {
   type = 'UnprocessableEntityError'
   statusCode = 422;
 
-  constructor(message: string, public errors: object[]) {
+  constructor(message: string, public errors: string[]) {
     super(message);
     this.errors = errors;
   }

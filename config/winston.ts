@@ -1,4 +1,4 @@
-import winston from "winston"
+import winston from "winston";
 
 const level = () => {
   const env = process.env.NODE_ENV || 'development'
