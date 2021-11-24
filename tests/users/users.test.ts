@@ -1,13 +1,15 @@
 import request from "supertest";
 import app from "../../app";
 import prisma from "../../config/db";
+import { clearData } from "../helpers";
 
+beforeEach(async () => await clearData());
 describe("Users", () => {
   beforeAll(async () => await prisma.$connect());
-  afterAll(async () => await prisma.$disconnect());
-
-  // Clean up the user's table
-  beforeEach(async () => await prisma.user.deleteMany());
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await clearData();
+  });
 
   describe("GET /users", () => {
     test("when have no users in the list, then returns an empty array", async () => {
@@ -71,7 +73,7 @@ describe("Users", () => {
     });
   });
 
-  describe("Post /users", () => {
+  describe.only("Post /users", () => {
     test("when send correct data, then create a new user", async () => {
       const data = {
         name: "John Doe",
