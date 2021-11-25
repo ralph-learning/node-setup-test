@@ -1,4 +1,4 @@
-const HTTP_ERROS: {[key: number]: string} = {
+const HTTP_ERROS: { [key: number]: string } = {
   400: 'Bad Request',
   401: 'Unauthorized',
   404: 'Not Found',
@@ -12,8 +12,8 @@ export function makeSuccessResponse(message: string, results?: any) {
     message,
     error: false,
     data: results
-  }
-};
+  };
+}
 
 export function makeHttpError({
   message = 'Something went wrong',
@@ -22,18 +22,21 @@ export function makeHttpError({
 }: {
   message?: string;
   statusCode?: number;
-  stack?: string
+  stack?: string;
 }) {
   return {
     message,
     code: HTTP_ERROS[statusCode],
     stack
-  }
+  };
 }
 
-export function makeValidationError(errors: string[] | string, statusCode = 422) {
+export function makeValidationError(
+  errors: string[] | string,
+  statusCode = 422
+) {
   return {
     code: HTTP_ERROS[statusCode],
     errors
   };
-};
+}

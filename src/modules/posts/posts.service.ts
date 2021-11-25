@@ -7,7 +7,7 @@ import { CreatePostInput } from './types';
 async function getAll() {
   const posts = await prisma.posts.findMany({
     where: { published: true },
-    include: { author: true },
+    include: { author: true }
   });
 
   return posts;
@@ -16,7 +16,7 @@ async function getAll() {
 async function getFirst(id: number) {
   const post = await prisma.posts.findFirst({
     where: { id },
-    include: { author: true },
+    include: { author: true }
   });
 
   if (!post) {
@@ -33,8 +33,8 @@ async function create({ title, content, authorEmail }: CreatePostInput) {
       title,
       content,
       published: false,
-      author: { connect: { email: authorEmail } },
-    },
+      author: { connect: { email: authorEmail } }
+    }
   });
 
   return newPost;
@@ -43,7 +43,7 @@ async function create({ title, content, authorEmail }: CreatePostInput) {
 async function publish(id: number) {
   const post = await prisma.posts.update({
     where: { id },
-    data: { published: true },
+    data: { published: true }
   });
 
   return post;
@@ -51,7 +51,7 @@ async function publish(id: number) {
 
 async function remove(id: number) {
   const postDeleted = await prisma.posts.delete({
-    where: { id },
+    where: { id }
   });
 
   return postDeleted;
@@ -64,4 +64,3 @@ export default {
   publish,
   remove
 };
-

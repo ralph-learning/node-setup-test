@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server:dev": "NODE_ENV=development ./node_modules/.bin/nodemon ./bin/www.ts",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "test": "NODE_ENV=test jest --watchAll --runInBand",
     "test:migrate:reset": "dotenv -e .env.test --  npx prisma migrate reset",
     "test:migrate:postgres": "dotenv -e .env.test -- npx prisma migrate dev"
@@ -23,6 +24,7 @@
     "cross-env": "^7.0.3",
     "jest": "^27.3.1",
     "nodemon": "^2.0.13",
+    "prettier": "^2.5.0",
     "prisma": "^3.2.0",
     "supertest": "^6.1.6",
     "ts-node": "^10.2.1",

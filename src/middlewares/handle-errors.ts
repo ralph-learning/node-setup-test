@@ -1,15 +1,18 @@
 import { makeHttpError, makeValidationError } from '../utils/response-api';
 import logger from '../../config/winston';
-import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError
+} from '@prisma/client/runtime';
 
-const PRISMA_ERROR_CODE: {[key: string]: string} = {
-  UNIQUE: "P2002",
-  NOT_FOUND: "P2025"
+const PRISMA_ERROR_CODE: { [key: string]: string } = {
+  UNIQUE: 'P2002',
+  NOT_FOUND: 'P2025'
 };
 
-const errorsMessagePrisma: {[key: string]: (target: string) => string} = {
-  "P2002": (target: string): string => `${target} should be unique.`
-}
+const errorsMessagePrisma: { [key: string]: (target: string) => string } = {
+  P2002: (target: string): string => `${target} should be unique.`
+};
 
 export default function handleErrors(
   err: any,
@@ -20,9 +23,7 @@ export default function handleErrors(
   logger.error(err.message);
 
   if (err.type === 'UnprocessableEntityError') {
-    return res
-      .status(err.statusCode)
-      .json(makeValidationError(err.errors));
+    return res.status(err.statusCode).json(makeValidationError(err.errors));
   }
 
   /*
@@ -32,9 +33,7 @@ export default function handleErrors(
       Incorrect field type provided (for example, setting a Boolean field to "Hello, I like cheese and gold!")
   */
   if (err instanceof PrismaClientValidationError) {
-    return res
-      .status(422)
-      .json(makeValidationError(err.message));
+    return res.status(422).json(makeValidationError(err.message));
   }
 
   /*
@@ -54,7 +53,9 @@ export default function handleErrors(
     }
 
     if (err.code === PRISMA_ERROR_CODE.UNIQUE) {
-      responseBody = makeValidationError(errorsMessagePrisma[err.code](meta.target));
+      responseBody = makeValidationError(
+        errorsMessagePrisma[err.code](meta.target)
+      );
 
       res.status(422);
     }
@@ -63,9 +64,10 @@ export default function handleErrors(
   }
 
   // Default
-  res.status(err.statusCode || 500).json(makeHttpError({
-    message: err.message,
-    statusCode: res.statusCode
-  }));
+  res.status(err.statusCode || 500).json(
+    makeHttpError({
+      message: err.message,
+      statusCode: res.statusCode
+    })
+  );
 }
-

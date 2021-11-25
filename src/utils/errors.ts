@@ -1,17 +1,17 @@
 class HttpError extends Error {
-  type = 'HttpError'
+  type = 'HttpError';
   constructor(public message: string) {
     super(message);
   }
 }
 
 export class BadRequest extends HttpError {
-  type = 'BadRequest'
+  type = 'BadRequest';
   statusCode = 400;
 }
 
 export class NotFound extends HttpError {
-  type = 'NotFound'
+  type = 'NotFound';
   statusCode = 404;
 }
 
@@ -21,7 +21,7 @@ export class GeneralError extends HttpError {
 }
 
 export class UnprocessableEntityError extends HttpError {
-  type = 'UnprocessableEntityError'
+  type = 'UnprocessableEntityError';
   statusCode = 422;
 
   constructor(message: string, public errors: string[]) {

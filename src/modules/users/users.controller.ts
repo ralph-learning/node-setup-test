@@ -4,10 +4,10 @@ import logger from '../../../config/winston';
 import { makeSuccessResponse } from '../../utils/response-api';
 import userService from './users.services';
 
-export async function index(_req: any, res:  any) {
+export async function index(_req: any, res: any) {
   const users = await userService.getAll();
 
-  res.status(200).json(makeSuccessResponse("Ok", users));
+  res.status(200).json(makeSuccessResponse('Ok', users));
 }
 
 export async function create(req: Request, res: Response) {
@@ -16,7 +16,7 @@ export async function create(req: Request, res: Response) {
 
   const user = await userService.create({ name, email });
 
-  res.status(201).json(makeSuccessResponse("User created", user));
+  res.status(201).json(makeSuccessResponse('User created', user));
 }
 
 export async function show(req: Request, res: Response) {
@@ -24,11 +24,11 @@ export async function show(req: Request, res: Response) {
 
   const user = await userService.getById(id);
 
-  res.status(200).json(makeSuccessResponse("Ok", user));
+  res.status(200).json(makeSuccessResponse('Ok', user));
 }
 
 export default {
   index,
   show,
   create
-}
+};
