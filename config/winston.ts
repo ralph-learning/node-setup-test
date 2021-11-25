@@ -1,4 +1,4 @@
-import winston from "winston"
+import winston from "winston";
 
 const level = () => {
   const env = process.env.NODE_ENV || 'development'
@@ -41,7 +41,7 @@ const logger = winston.createLogger({
   transports,
 });
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
   logger.add(new winston.transports.Console());
 }
 

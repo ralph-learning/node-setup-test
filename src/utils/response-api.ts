@@ -31,9 +31,9 @@ export function makeHttpError({
   }
 }
 
-export function makeValidationError(errors: any) {
+export function makeValidationError(errors: string[] | string, statusCode = 422) {
   return {
-    code: "Validation errors",
+    code: HTTP_ERROS[statusCode],
     errors
   };
 };

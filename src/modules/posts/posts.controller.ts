@@ -21,7 +21,9 @@ async function create(req: Request, res: Response) {
 
   const newPost = await postsService.create({ title, content, authorEmail });
 
-  res.json(makeSuccessResponse("Post created", newPost));
+  res
+    .status(201)
+    .json(makeSuccessResponse("Post created", newPost));
 }
 
 async function publish(req: Request, res: Response) {
