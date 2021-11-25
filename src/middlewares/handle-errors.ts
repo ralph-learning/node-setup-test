@@ -1,10 +1,11 @@
 import { makeHttpError, makeValidationError } from '../utils/response-api';
 import logger from '../../config/winston';
-import { PrismaClientValidationError } from '@prisma/client/runtime';
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
 
-const errorsPrisma: {[key: string]: string} = {
+const PRISMA_ERROR_CODE: {[key: string]: string} = {
   UNIQUE: "P2002",
-}
+  NOT_FOUND: "P2025"
+};
 
 const errorsMessagePrisma: {[key: string]: (target: string) => string} = {
   "P2002": (target: string): string => `${target} should be unique.`
@@ -17,12 +18,6 @@ export default function handleErrors(
   _next: any
 ) {
   logger.error(err.message);
-
-  if (err.code === errorsPrisma.UNIQUE) {
-    return res
-      .status(422)
-      .json(makeValidationError(errorsMessagePrisma[err.code](err.meta.target)));
-  }
 
   if (err.type === 'UnprocessableEntityError') {
     return res
@@ -37,7 +32,34 @@ export default function handleErrors(
       Incorrect field type provided (for example, setting a Boolean field to "Hello, I like cheese and gold!")
   */
   if (err instanceof PrismaClientValidationError) {
-    return res.status(422).json(makeValidationError(err.message));
+    return res
+      .status(422)
+      .json(makeValidationError(err.message));
+  }
+
+  /*
+    Prisma Client throws a PrismaClientKnownRequestError exception if the query engine returns
+    a known error related to the request.
+    for example:
+      a unique constraint violation.
+  */
+  if (err instanceof PrismaClientKnownRequestError) {
+    let responseBody;
+    const meta: any = err.meta;
+
+    if (err.code === PRISMA_ERROR_CODE.NOT_FOUND) {
+      responseBody = makeValidationError(meta.cause);
+
+      res.status(404);
+    }
+
+    if (err.code === PRISMA_ERROR_CODE.UNIQUE) {
+      responseBody = makeValidationError(errorsMessagePrisma[err.code](meta.target));
+
+      res.status(422);
+    }
+
+    return res.json(responseBody);
   }
 
   // Default

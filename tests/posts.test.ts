@@ -83,6 +83,29 @@ describe("Posts", () => {
 
       expect(response.body.code).toBe('Unprocessable Entity');
       expect(response.statusCode).toBe(422);
-    })
+    });
+  });
+
+  describe('PUT /posts/publish/:id', () => {
+    test('when passed a existent post, then this article should be published', async () => {
+      const postData = {
+        title: "Post 01",
+        content: "Hello, this a fake post",
+      }
+
+      const post = await prisma.posts.create({ data: postData });
+
+       await request(app).put(`/posts/publish/${post.id}`);
+       const response = await request(app).get('/feed');
+
+      expect(response.body.data[0]?.published).toBe(true);
+      expect(response.status).toBe(200);
+    });
+
+    test('when passed an unexisted post, then repsonse as not found', async () => {
+      const response = await request(app).put('/posts/publish/123');
+
+      expect(response.statusCode).toBe(404);
+    });
   });
 });
