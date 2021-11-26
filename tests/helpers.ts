@@ -4,7 +4,7 @@ export async function clearData() {
   try {
     await prisma.posts.deleteMany({});
     await prisma.user.deleteMany({});
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
 }

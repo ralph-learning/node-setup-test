@@ -1,1 +1,1 @@
-import "../config/enviroments";
+import '../config/enviroments';
