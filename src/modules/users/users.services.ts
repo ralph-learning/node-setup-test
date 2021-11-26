@@ -10,7 +10,7 @@ async function getAll() {
 }
 
 async function getById(id: string) {
-  const user = await prisma.user.findFirst({ where: { id: Number(id) }});
+  const user = await prisma.user.findFirst({ where: { id: Number(id) } });
 
   return user;
 }
@@ -19,14 +19,17 @@ async function create(user: CreateUserInput) {
   const userValidationErrors = validateUser(user);
 
   if (userValidationErrors.length > 0) {
-    throw new UnprocessableEntityError('Validation error', userValidationErrors);
+    throw new UnprocessableEntityError(
+      'Validation error',
+      userValidationErrors
+    );
   }
 
   const newUser = await prisma.user.create({
     data: {
       name: user.name,
-      email: user.email,
-    },
+      email: user.email
+    }
   });
 
   logger.debug(`User created: ${JSON.stringify(newUser)}`);

@@ -1,8 +1,8 @@
-import request from "supertest";
-import app from "../app";
-import prisma from "../config/db";
+import request from 'supertest';
+import app from '../app';
+import prisma from '../config/db';
 
-import { clearData } from './helpers'
+import { clearData } from './helpers';
 
 beforeAll(async () => await prisma.$connect());
 afterAll(async () => await prisma.$disconnect());
@@ -10,30 +10,30 @@ afterAll(async () => await prisma.$disconnect());
 // clean up data
 beforeEach(async () => await clearData());
 
-describe("Posts", () => {
-  describe("GET /posts", () => {
-    it("should return all posts", async () => {
+describe('Posts', () => {
+  describe('GET /posts', () => {
+    it('should return all posts', async () => {
       const postData = {
-        title: "Post 01",
-        content: "Hello, this a fake post",
+        title: 'Post 01',
+        content: 'Hello, this a fake post',
         published: true
       };
 
       // create 3 posts without an auhor
       await prisma.posts.createMany({ data: [postData, postData, postData] });
 
-      const response = await request(app).get("/feed");
+      const response = await request(app).get('/feed');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toHaveLength(3);
     });
   });
 
-  describe("GET /posts/:id", () => {
-    it("should return a post", async () => {
+  describe('GET /posts/:id', () => {
+    it('should return a post', async () => {
       const postData = {
-        title: "Post 01",
-        content: "Hello, this a fake post",
+        title: 'Post 01',
+        content: 'Hello, this a fake post',
         published: true
       };
 
@@ -56,8 +56,8 @@ describe("Posts", () => {
       });
 
       const postData = {
-        title: "Post 01",
-        content: "Hello, this a fake post",
+        title: 'Post 01',
+        content: 'Hello, this a fake post',
         authorEmail: author.email
       };
 
@@ -65,7 +65,7 @@ describe("Posts", () => {
         content: postData.content,
         title: postData.title,
         authorId: author.id
-      }
+      };
 
       const response = await request(app).post('/posts').send(postData);
 
@@ -73,11 +73,11 @@ describe("Posts", () => {
       expect(response.status).toBe(201);
     });
 
-    it('when I don\'t give the author email, then return an error', async () => {
+    it("when I don't give the author email, then return an error", async () => {
       const postData = {
-        title: "Post 01",
-        content: "Hello, this a fake post"
-      }
+        title: 'Post 01',
+        content: 'Hello, this a fake post'
+      };
 
       const response = await request(app).post('/posts').send(postData);
 
@@ -89,14 +89,14 @@ describe("Posts", () => {
   describe('PUT /posts/publish/:id', () => {
     test('when passed a existent post, then this article should be published', async () => {
       const postData = {
-        title: "Post 01",
-        content: "Hello, this a fake post",
-      }
+        title: 'Post 01',
+        content: 'Hello, this a fake post'
+      };
 
       const post = await prisma.posts.create({ data: postData });
 
-       await request(app).put(`/posts/publish/${post.id}`);
-       const response = await request(app).get('/feed');
+      await request(app).put(`/posts/publish/${post.id}`);
+      const response = await request(app).get('/feed');
 
       expect(response.body.data[0]?.published).toBe(true);
       expect(response.status).toBe(200);

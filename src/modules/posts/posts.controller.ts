@@ -6,14 +6,14 @@ import postsService from './posts.service';
 export async function index(_req: Request, res: Response) {
   const posts = await postsService.getAll();
 
-  res.json(makeSuccessResponse("Ok", posts));
+  res.json(makeSuccessResponse('Ok', posts));
 }
 
 export async function show(req: Request, res: Response) {
   const { id } = req.params;
   const post = await postsService.getFirst(Number(id));
 
-  res.json(makeSuccessResponse("Ok", post));
+  res.json(makeSuccessResponse('Ok', post));
 }
 
 async function create(req: Request, res: Response) {
@@ -21,9 +21,7 @@ async function create(req: Request, res: Response) {
 
   const newPost = await postsService.create({ title, content, authorEmail });
 
-  res
-    .status(201)
-    .json(makeSuccessResponse("Post created", newPost));
+  res.status(201).json(makeSuccessResponse('Post created', newPost));
 }
 
 async function publish(req: Request, res: Response) {
@@ -31,14 +29,14 @@ async function publish(req: Request, res: Response) {
 
   const postPublished = await postsService.publish(Number(id));
 
-  res.json(makeSuccessResponse("Post published", postPublished));
+  res.json(makeSuccessResponse('Post published', postPublished));
 }
 
 async function remove(req: Request, res: Response) {
   const { id } = req.params;
   const postDeleted = await postsService.remove(Number(id));
 
-  res.status(200).json(makeSuccessResponse("Post deleted", postDeleted));
+  res.status(200).json(makeSuccessResponse('Post deleted', postDeleted));
 }
 
 export default {
@@ -46,5 +44,5 @@ export default {
   index,
   publish,
   remove,
-  show,
-}
+  show
+};
