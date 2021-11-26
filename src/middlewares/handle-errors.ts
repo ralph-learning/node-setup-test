@@ -4,6 +4,7 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError
 } from '@prisma/client/runtime';
+import express from 'express';
 
 const PRISMA_ERROR_CODE: { [key: string]: string } = {
   UNIQUE: 'P2002',
@@ -16,9 +17,9 @@ const errorsMessagePrisma: { [key: string]: (target: string) => string } = {
 
 export default function handleErrors(
   err: any,
-  _req: any,
-  res: any,
-  _next: any
+  _req: express.Request,
+  res: express.Response,
+  _next: express.RequestHandler
 ) {
   logger.error(err.message);
 
