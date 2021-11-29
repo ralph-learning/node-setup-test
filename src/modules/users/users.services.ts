@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { validateUser } from './users.validations';
 
 import prisma from '../../../config/db';
@@ -25,10 +26,13 @@ async function create(user: CreateUserInput) {
     );
   }
 
+  const hashedPassword = bcrypt.hashSync(user.password, 10);
+
   const newUser = await prisma.user.create({
     data: {
       name: user.name,
-      email: user.email
+      email: user.email,
+      password: hashedPassword
     }
   });
 

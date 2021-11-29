@@ -18,9 +18,13 @@ export async function index(_req: any, res: any) {
 
 export async function create(req: Request, res: Response) {
   logger.debug(JSON.stringify(req.body));
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
 
-  const user = await userService.create({ name, email });
+  const user = await userService.create({
+    name,
+    email,
+    password
+  });
 
   res.status(201).json(makeSuccessResponse('User created', user));
 }

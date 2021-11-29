@@ -5,7 +5,7 @@ import postsController from './posts.controller';
 
 export default function (app: Express) {
   app.get('/profile', auth, postsController.profile);
-  app.get('/feed', auth, postsController.index);
+  app.get('/feed', postsController.index);
   app.get('/posts/:id', postsController.show);
   app.post('/posts', postsController.create);
   app.put('/posts/publish/:id', postsController.publish);
