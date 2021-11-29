@@ -41,7 +41,6 @@ export async function show(req: Request, res: Response) {
 
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
-
   const user = await userService.findByUniqueEmail(email);
 
   if (!user) {
@@ -53,7 +52,7 @@ export async function login(req: Request, res: Response) {
   if (await bcrypt.compare(password, user.password)) {
     const token = jwt.sign({ email }, secret, { expiresIn: '12h' });
 
-    res.status(200).json(makeSuccessResponse('Ok', { token }));
+    return res.status(200).json(makeSuccessResponse('Ok', { token }));
   }
 
   res

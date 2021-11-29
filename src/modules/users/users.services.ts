@@ -1,11 +1,11 @@
 import bcrypt from 'bcryptjs';
-import { validateUser } from './users.validations';
-
-import prisma from '../../../config/db';
-import { UnprocessableEntityError } from '../../utils/errors';
-import { CreateUserInput } from './types';
-import logger from '../../../config/winston';
 import { User } from '@prisma/client';
+
+import { validateUser } from './users.validations';
+import { CreateUserInput } from './types';
+import prisma from '../../../config/db';
+import logger from '../../../config/winston';
+import { UnprocessableEntityError } from '../../utils/errors';
 
 async function getAll() {
   return await prisma.user.findMany();
@@ -34,7 +34,6 @@ async function create(user: CreateUserInput) {
   }
 
   const hashedPassword = bcrypt.hashSync(user.password, 10);
-
   const newUser = await prisma.user.create({
     data: {
       name: user.name,

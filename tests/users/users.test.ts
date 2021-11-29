@@ -1,4 +1,5 @@
 import request from 'supertest';
+
 import app from '../../app';
 import prisma from '../../config/db';
 import { clearData } from '../helpers';
@@ -167,6 +168,32 @@ describe('Users', () => {
       const response = await request(app).post('/login').send(data);
 
       expect(response.body.errors).toEqual('Invalid credentials');
+    });
+  });
+
+  describe('GET /profile', () => {
+    test('when the user is authenticated, then returns the profile info', async () => {
+      const data = {
+        email: 'john@doe.com',
+        password: '123456'
+      };
+      // Create a user
+      await request(app).post('/users').send(data);
+      // login
+      const response = await request(app).post('/login').send(data);
+      // get profile
+      const responseProfile = await await request(app)
+        .get('/profile')
+        .set('x-access-token', response.body.data.token);
+
+      expect(responseProfile.body.errors).toBeUndefined();
+      expect(responseProfile.body.data).toEqual({
+        user: {
+          email: data.email,
+          exp: expect.any(Number),
+          iat: expect.any(Number)
+        }
+      });
     });
   });
 });

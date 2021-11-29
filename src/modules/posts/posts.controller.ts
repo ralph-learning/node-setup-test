@@ -41,7 +41,7 @@ async function remove(req: Request, res: Response) {
 }
 
 function profile(req: RequestUser, res: Response) {
-  res.status(200).json(makeSuccessResponse('Ok', { username: req.user }));
+  res.status(200).json(makeSuccessResponse('Ok', { user: req.user }));
 }
 
 export default {
