@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+
 import logger from '../../../config/winston';
 
 import {
@@ -10,7 +12,7 @@ import userService from './users.services';
 
 const secret = process.env.SECRET || 'secret';
 
-export async function index(_req: any, res: any) {
+export async function index(_req: Request, res: Response) {
   const users = await userService.getAll();
 
   res.status(200).json(makeSuccessResponse('Ok', users));
@@ -38,10 +40,18 @@ export async function show(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (username === 'admin' && password === 'admin') {
-    const token = jwt.sign({ username }, secret, { expiresIn: '1h' });
+  const user = await userService.findByUniqueEmail(email);
+
+  if (!user) {
+    return res
+      .status(401)
+      .json(makeValidationError('Invalid credentials', res.statusCode));
+  }
+
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({ email }, secret, { expiresIn: '12h' });
 
     res.status(200).json(makeSuccessResponse('Ok', { token }));
   }

@@ -12,6 +12,7 @@
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev",
     "migrate:dev:reset": "dotenv -e .env.development --  npx prisma migrate reset",
     "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "studio:dev": "dotenv -e .env.development -- npx prisma studio",
     "console": "dotenv -e .env.development prisma-repl"
   },
   "keywords": [],

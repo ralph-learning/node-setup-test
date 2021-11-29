@@ -12,7 +12,8 @@ const PRISMA_ERROR_CODE: { [key: string]: string } = {
 };
 
 const errorsMessagePrisma: { [key: string]: (target: string) => string } = {
-  P2002: (target: string): string => `${target} should be unique.`
+  [PRISMA_ERROR_CODE.UNIQUE]: (target: string): string =>
+    `${target} should be unique.`
 };
 
 export default function handleErrors(

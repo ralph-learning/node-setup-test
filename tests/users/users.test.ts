@@ -143,4 +143,30 @@ describe('Users', () => {
       expect(response.statusCode).toEqual(422);
     });
   });
+
+  describe('POST /login', () => {
+    test('when has an account, then make a login', async () => {
+      const data = {
+        email: 'jhon@doe.com',
+        password: '123456'
+      };
+
+      await request(app).post('/users').send(data);
+      const response = await request(app).post('/login').send(data);
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data).toEqual({ token: expect.any(String) });
+    });
+
+    test('when has no account, then returns an credentials error', async () => {
+      const data = {
+        email: 'jhon@doe.com',
+        password: '123456'
+      };
+
+      const response = await request(app).post('/login').send(data);
+
+      expect(response.body.errors).toEqual('Invalid credentials');
+    });
+  });
 });

@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { makeHttpError } from '../utils/response-api';
+import logger from '../../config/winston';
 
 const SECRET = process.env.SECRET || 'secret';
 
@@ -17,16 +18,27 @@ export default function verifyToken(
     req.body.token || req.query.token || req.headers['x-access-token'];
 
   if (!token) {
-    return res
-      .status(403)
-      .json(makeHttpError({ message: 'No token provided' }));
+    logger.error('No token provided');
+
+    return res.status(403).json(
+      makeHttpError({
+        message: 'No token provided',
+        statusCode: res.statusCode
+      })
+    );
   }
 
   try {
     const decoded = jwt.verify(token, SECRET);
     req.user = decoded;
-  } catch (_error) {
-    return res.status(401).json(makeHttpError({ message: 'Invalid token' }));
+  } catch (error) {
+    logger.error(JSON.stringify(error));
+
+    return res
+      .status(401)
+      .json(
+        makeHttpError({ message: 'Invalid token', statusCode: res.statusCode })
+      );
   }
 
   next();

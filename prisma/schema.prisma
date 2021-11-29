@@ -14,7 +14,6 @@ model User {
   posts    Posts[]
   password String
 
-
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
