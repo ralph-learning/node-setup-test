@@ -4,7 +4,8 @@ import { CreateUserInput } from './types';
 
 const userSchema = joi.object().keys({
   name: joi.string(),
-  email: joi.string().email().required()
+  email: joi.string().email().required(),
+  password: joi.string().required()
 });
 
 export function validateUser(user: CreateUserInput): string[] {

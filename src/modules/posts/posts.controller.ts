@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { RequestUser } from '../../middlewares/auth';
 
 import { makeSuccessResponse } from '../../utils/response-api';
 import postsService from './posts.service';
@@ -39,10 +40,15 @@ async function remove(req: Request, res: Response) {
   res.status(200).json(makeSuccessResponse('Post deleted', postDeleted));
 }
 
+function profile(req: RequestUser, res: Response) {
+  res.status(200).json(makeSuccessResponse('Ok', { user: req.user }));
+}
+
 export default {
   create,
   index,
   publish,
   remove,
-  show
+  show,
+  profile
 };

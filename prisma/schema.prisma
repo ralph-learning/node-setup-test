@@ -8,10 +8,11 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Posts[]
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  posts    Posts[]
+  password String
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt

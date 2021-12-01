@@ -51,7 +51,8 @@ describe('Posts', () => {
       const author = await prisma.user.create({
         data: {
           name: 'John Doe',
-          email: 'john@doe.com'
+          email: 'john@doe.com',
+          password: '123456'
         }
       });
 

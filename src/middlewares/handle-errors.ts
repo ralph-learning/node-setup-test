@@ -4,7 +4,7 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError
 } from '@prisma/client/runtime';
-import express from 'express';
+import { Response, Request, NextFunction } from 'express';
 
 const PRISMA_ERROR_CODE: { [key: string]: string } = {
   UNIQUE: 'P2002',
@@ -12,14 +12,15 @@ const PRISMA_ERROR_CODE: { [key: string]: string } = {
 };
 
 const errorsMessagePrisma: { [key: string]: (target: string) => string } = {
-  P2002: (target: string): string => `${target} should be unique.`
+  [PRISMA_ERROR_CODE.UNIQUE]: (target: string): string =>
+    `${target} should be unique.`
 };
 
 export default function handleErrors(
   err: any,
-  _req: express.Request,
-  res: express.Response,
-  _next: express.RequestHandler
+  _req: Request,
+  res: Response,
+  _next: NextFunction
 ) {
   logger.error(err.message);
 
